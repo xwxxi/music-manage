@@ -48,6 +48,10 @@ a {
   border-radius: 5px;
 }
 
+div{
+  box-sizing: border-box;
+}
+
 .crumbs {
   margin-bottom: 20px;
 }
