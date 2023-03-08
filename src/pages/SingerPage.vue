@@ -1,6 +1,6 @@
 <template>
     <div>
-        后台首页xxxxxxxxxxxxxxxxx
+        歌手页面
     </div>
 </template>
 

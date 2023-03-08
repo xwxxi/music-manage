@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { getLoginStatus } from "@/api/index.js"
+import { getLoginStatus } from "@/api/api.js"
 import { mixins } from "@/mixins/index.js"
 export default {
   name: "Login",
@@ -49,7 +49,8 @@ export default {
         if (valid) {
           let data = await getLoginStatus(this.userForm)
           if (data.code == 200) {
-            this.$router.push("/info")
+            localStorage.setItem('userName',this.userForm.name)
+            this.$router.push("/Info")
             this.notify(data.msg)
           } else {
             this.notify(data.msg, "error")

@@ -1,6 +1,6 @@
 <template>
     <div>
-        后台首页xxxxxxxxxxxxxxxxx
+        用户管理页面
     </div>
 </template>
 
