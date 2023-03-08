@@ -13,7 +13,7 @@
         <template>
           <el-menu-item :index="item.index" :key="item.index">
             <i :class="item.icon"></i>
-            {{ item.title }}
+            <span :collapse="collapse">{{ item.title }}</span>
           </el-menu-item>
         </template>
       </template>
@@ -79,6 +79,14 @@ export default {
   width: 150px;
 }
 .el-menu {
-    border: none;
+  border: none;
+}
+/*隐藏文字*/
+.el-menu--collapse .el-submenu__title span {
+  display: none;
+}
+/*隐藏 > */
+.el-menu--collapse .el-submenu__title .el-submenu__icon-arrow {
+  display: none;
 }
 </style>
