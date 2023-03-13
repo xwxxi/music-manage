@@ -97,7 +97,6 @@ export default {
       let data = await getAllSinger()
       this.tableData = [...data.msg]
     },
-
     /**添加歌手 */
     async addSinger() {
       this.addSingerForm["pic"] = "/img/singerPic/hhh.jpg"
