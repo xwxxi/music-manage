@@ -86,7 +86,6 @@ export default {
 
 <style scoped>
 .header {
-  position: relative;
   background-color: #253041;
   box-sizing: border-box;
   width: 100%;

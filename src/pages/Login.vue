@@ -43,13 +43,15 @@ export default {
       },
     }
   },
+  created() {
+  },
   methods: {
     submitForm() {
       this.$refs["userForm"].validate(async (valid) => {
         if (valid) {
           let data = await getLoginStatus(this.userForm)
           if (data.code == 200) {
-            localStorage.setItem('userName',this.userForm.name)
+            localStorage.setItem("userName", this.userForm.name)
             this.$router.push("/Info")
             this.notify(data.msg)
           } else {

@@ -29,22 +29,22 @@ export default {
       collapse: false,
       items: [
         {
-          icon: "el-icon-document",
+          icon: "el-icon-s-home",
           index: "Info",
           title: "系统首页",
         },
         {
-          icon: "el-icon-document",
+          icon: "el-icon-user-solid",
           index: "Consumer",
           title: "用户管理",
         },
         {
-          icon: "el-icon-document",
+          icon: "el-icon-s-data",
           index: "Singer",
           title: "歌手管理",
         },
         {
-          icon: "el-icon-document",
+          icon: "el-icon-s-order",
           index: "SongList",
           title: "歌单管理",
         },
@@ -68,12 +68,8 @@ export default {
 <style scoped>
 .sidebar {
   display: block;
-  position: absolute;
-  left: 0;
-  top: 70px;
-  bottom: 0;
   background-color: #334256;
-  overflow-y: auto;
+  height: 100%;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
   width: 150px;
