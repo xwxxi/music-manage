@@ -36,6 +36,12 @@ const router = new Router({
           path: '/SongList',
           component: resolve => require(['../pages/SongListPage.vue'], resolve),
           meta: { isAuth: true }
+        },,
+        {
+          // 如果子路由的path的最前边有“/”，则不需要加父路由的路径即可访问此子组件。
+          path: '/Song',
+          component: resolve => require(['../pages/SongPage.vue'], resolve),
+          meta: { isAuth: true }
         },
       ]
     }

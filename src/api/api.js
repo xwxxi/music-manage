@@ -16,13 +16,31 @@ const deleteSinger = (params) => {
 }
 
 // 查询所有歌手
-const getAllSinger = ()=>{
+const getAllSinger = () => {
   return getAction(`singer/selectAll`)
+}
+
+// 歌手分页
+const pagehelper = (params) => {
+  return getAction(`singer/pagehelper/${params.page}/${params.size}`)
+}
+
+// 根据歌手名称进行模糊查询
+const getSingerOfName = (params) => {
+  return getAction(`singer/getSingerOfName`, params)
+}
+
+// 修改歌手
+const updateSinger = (data)=>{
+  return postAction(`singer/update`, data)
 }
 
 export {
   getLoginStatus,
   deleteSinger,
   addSinger,
-  getAllSinger
+  getAllSinger,
+  pagehelper,
+  getSingerOfName,
+  updateSinger
 }
