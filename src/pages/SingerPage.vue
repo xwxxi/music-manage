@@ -1,7 +1,7 @@
 <template>
   <div class="table">
-    <el-dialog title="添加歌手" :visible.sync="contentDislogVisible" width="400px" center>
-      <el-form :model="addSingerForm" ref="addSingerForm" label-width="80px">
+    <el-dialog title="添加歌手" :visible.sync="contentDislogVisible" width="500px" center @close="handleAddSingerClose">
+      <el-form :model="addSingerForm" :rules="singFormRules" ref="addSingerForm" label-width="80px">
         <el-form-item prop="name" label="歌手名" size="mini">
           <el-input v-model="addSingerForm.name" placeholder="请输入歌手名"></el-input>
         </el-form-item>
@@ -29,8 +29,8 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="修改歌手" :visible.sync="editVisible" width="400px" center>
-      <el-form :model="editSingerForm" ref="editSingerForm" label-width="80px">
+    <el-dialog title="修改歌手" :visible.sync="editVisible" width="500px" center>
+      <el-form :model="editSingerForm" :rules="singFormRules" ref="editSingerForm" label-width="80px">
         <el-form-item prop="name" label="歌手名" size="mini">
           <el-input v-model="editSingerForm.name" placeholder="请输入歌手名"></el-input>
         </el-form-item>
@@ -67,7 +67,7 @@
         </el-popconfirm>
       </div>
     </div>
-    <el-table size="mini" border style="width: 100%" height="700px" :data="data" @selection-change="handleSelectionChange">
+    <el-table size="mini" border style="width: 100%" height="900px" :data="data" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="40"> </el-table-column>
       <el-table-column label="歌手图片" width="110" align="center">
         <template slot-scope="scope">
@@ -157,6 +157,28 @@ export default {
       currentPage: 1,
       // 多选删除，选择的id
       multipleSelection: [],
+      singFormRules: {
+        name: {
+          required: true,
+          message: "请输入歌手名称",
+          trigger: "blur",
+        },
+        sex: {
+          required: true,
+          message: "请输入选择性别",
+          trigger: "blur",
+        },
+        birth: {
+          required: true,
+          message: "请输入生日",
+          trigger: "blur",
+        },
+        location: {
+          required: true,
+          message: "请输入地址",
+          trigger: "blur",
+        },
+      },
     }
   },
   watch: {
@@ -194,18 +216,29 @@ export default {
     },
 
     /**添加歌手 */
-    async addSinger() {
-      this.addSingerForm["pic"] = "/img/singerPic/hhh.jpg"
-      let data = await addSinger(this.addSingerForm)
-      if (data.code == 200) {
-        this.notify(data.msg)
-        this.contentDislogVisible = false
-        this.getData(Math.floor((this.tableData.length + 1) / this.pageSize) + ((this.tableData.length + 1) % this.pageSize == 0 ? 0 : 1))
-        for (const key in this.addSingerForm) {
-          this.addSingerForm[key] = ""
+    addSinger() {
+      this.$refs["addSingerForm"].validate(async (valid) => {
+        if (valid) {
+          this.addSingerForm["pic"] = "/img/singerPic/hhh.jpg"
+          let data = await addSinger(this.addSingerForm)
+          if (data.code == 200) {
+            this.notify(data.msg)
+            this.contentDislogVisible = false
+            this.getData(Math.floor((this.tableData.length + 1) / this.pageSize) + ((this.tableData.length + 1) % this.pageSize == 0 ? 0 : 1))
+            this.handleAddSingerClose()
+          } else {
+            this.notify(data.msg, "error")
+          }
+        } else {
+          console.log("error submit!!")
         }
-      } else {
-        this.notify(data.msg, "error")
+      })
+    },
+
+    /**添加歌手关闭弹窗，清空表单 */
+    handleAddSingerClose() {
+      for (const key in this.addSingerForm) {
+        this.addSingerForm[key] = ""
       }
     },
 
@@ -216,15 +249,21 @@ export default {
     },
 
     /**弹窗编辑页面，保存修改的数据 */
-    async editSinger() {
-      let data = await updateSinger(this.editSingerForm)
-      if (data.code == 200) {
-        this.notify(data.msg)
-        this.editVisible = false
-        this.getData(this.currentPage)
-      } else {
-        this.notify(data.msg, "error")
-      }
+    editSinger() {
+      this.$refs["editSingerForm"].validate(async (valid) => {
+        if (valid) {
+          let data = await updateSinger(this.editSingerForm)
+          if (data.code == 200) {
+            this.notify(data.msg)
+            this.editVisible = false
+            this.getData(this.currentPage)
+          } else {
+            this.notify(data.msg, "error")
+          }
+        } else {
+          console.log("error submit!!")
+        }
+      })
     },
 
     /**删除歌手 */
