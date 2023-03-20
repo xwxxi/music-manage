@@ -1,8 +1,8 @@
 <template>
   <div class="header">
     <!-- 菜单的折叠按钮 -->
-    <div class="collapse-btn">
-      <i class="el-icon-menu" @click="collapseChange()"></i>
+    <div class="collapse-btn" @click="collapseChange()">
+      <i class="el-icon-menu"></i>
     </div>
     <div class="logo">音乐网站后台管理</div>
     <div class="user-right">

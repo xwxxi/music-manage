@@ -67,7 +67,7 @@
         </el-popconfirm>
       </div>
     </div>
-    <el-table size="mini" border style="width: 100%" height="900px" :data="data" @selection-change="handleSelectionChange">
+    <el-table size="mini" border style="width: 100%" height="700px" :data="data" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="40"> </el-table-column>
       <el-table-column label="歌手图片" width="110" align="center">
         <template slot-scope="scope">
@@ -121,7 +121,7 @@
 import { addSinger, getAllSinger, updateSinger, deleteSinger } from "@/api/api.js"
 import { mixins } from "@/mixins/index.js"
 export default {
-  name: "singer",
+  name: "Singer",
   mixins: [mixins],
   data() {
     return {

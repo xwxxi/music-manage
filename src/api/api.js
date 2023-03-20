@@ -31,8 +31,13 @@ const getSingerOfName = (params) => {
 }
 
 // 修改歌手
-const updateSinger = (data)=>{
+const updateSinger = (data) => {
   return postAction(`singer/update`, data)
+}
+
+// 添加歌曲
+const addSong = (data) => {
+  return fileUploadAction(`song/add`, data)
 }
 
 export {
@@ -42,5 +47,6 @@ export {
   getAllSinger,
   pagehelper,
   getSingerOfName,
-  updateSinger
+  updateSinger,
+  addSong
 }
