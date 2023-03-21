@@ -5,6 +5,7 @@ import { getAction, deleteAction, putAction, postAction, downFileAction, fileUpl
 const getLoginStatus = (data) => {
   return postAction(`admin/login/status`, data);
 }
+
 // 添加歌手
 const addSinger = (data) => {
   return postAction(`singer/add`, data)
@@ -40,6 +41,21 @@ const addSong = (data) => {
   return fileUploadAction(`song/add`, data)
 }
 
+// 根据歌手id获取歌曲
+const songOfSingerId = (params)=>{
+  return getAction(`song/singer/detail`,params)
+}
+
+// 删除歌曲
+const deleteSong = (params) => {
+  return getAction(`song/delete`, params)
+}
+
+// 修改歌曲
+const updateSong = (data) => {
+  return postAction(`song/update`, data)
+}
+
 export {
   getLoginStatus,
   deleteSinger,
@@ -48,5 +64,8 @@ export {
   pagehelper,
   getSingerOfName,
   updateSinger,
-  addSong
+  addSong,
+  songOfSingerId,
+  deleteSong,
+  updateSong
 }

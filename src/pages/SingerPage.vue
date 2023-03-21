@@ -1,7 +1,7 @@
 <template>
   <div class="table">
     <el-dialog title="添加歌手" :visible.sync="contentDislogVisible" width="500px" center @close="handleAddSingerClose">
-      <el-form :model="addSingerForm" :rules="singFormRules" ref="addSingerForm" label-width="80px">
+      <el-form :model="addSingerForm" :rules="singerFormRules" ref="addSingerForm" label-width="80px">
         <el-form-item prop="name" label="歌手名" size="mini">
           <el-input v-model="addSingerForm.name" placeholder="请输入歌手名"></el-input>
         </el-form-item>
@@ -30,7 +30,7 @@
     </el-dialog>
 
     <el-dialog title="修改歌手" :visible.sync="editVisible" width="500px" center>
-      <el-form :model="editSingerForm" :rules="singFormRules" ref="editSingerForm" label-width="80px">
+      <el-form :model="editSingerForm" :rules="singerFormRules" ref="editSingerForm" label-width="80px">
         <el-form-item prop="name" label="歌手名" size="mini">
           <el-input v-model="editSingerForm.name" placeholder="请输入歌手名"></el-input>
         </el-form-item>
@@ -157,7 +157,7 @@ export default {
       currentPage: 1,
       // 多选删除，选择的id
       multipleSelection: [],
-      singFormRules: {
+      singerFormRules: {
         name: {
           required: true,
           message: "请输入歌手名称",

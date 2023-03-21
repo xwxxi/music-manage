@@ -1,10 +1,10 @@
 <template>
   <div class="table">
     <div class="crumbs">
-      <i class="el-icon-tickets">歌曲管理</i>
+      <i class="el-icon-tickets">&nbsp;{{ singerName }}-歌曲管理</i>
     </div>
     <el-dialog title="添加歌曲" :visible.sync="contentDislogVisible" width="500px" center @close="handleAddSongClose">
-      <el-form :model="addSongForm" ref="addSongForm" label-width="80px">
+      <el-form :model="addSongForm" ref="addSongForm" label-width="90px" :rules="songFormRules">
         <el-form-item prop="name" label="歌名" size="mini">
           <el-input v-model="addSongForm.name" placeholder="请输入歌名"></el-input>
         </el-form-item>
@@ -12,13 +12,12 @@
           <el-input v-model="addSongForm.introduction" placeholder="请输入简介"></el-input>
         </el-form-item>
         <el-form-item prop="lyric" label="歌词" size="mini">
-          <el-input type="textarea" v-model="addSongForm.lyric" placeholder="请输入歌词"></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 20 }" v-model="addSongForm.lyric" placeholder="请输入歌词"></el-input>
         </el-form-item>
         <el-form-item label="歌曲上传" size="mini">
           <el-upload class="upload-demo" ref="upload" drag action="" multiple :auto-upload="false" :http-request="httpRequest">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -29,7 +28,7 @@
     </el-dialog>
 
     <el-dialog title="修改歌曲" :visible.sync="editVisible" width="500px" center>
-      <el-form :model="editSongForm" ref="editSongForm" label-width="80px">
+      <el-form :model="editSongForm" ref="editSongForm" label-width="90px" :rules="songFormRules">
         <el-form-item prop="name" label="歌手-歌名" size="mini">
           <el-input v-model="editSongForm.name" placeholder="请输入歌名"></el-input>
         </el-form-item>
@@ -37,7 +36,7 @@
           <el-input v-model="editSongForm.introduction" placeholder="请输入简介"></el-input>
         </el-form-item>
         <el-form-item prop="lyric" label="歌词" size="mini">
-          <el-input type="textarea" v-model="editSongForm.lyric" placeholder="请输入歌词"></el-input>
+          <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 20 }" v-model="editSongForm.lyric" placeholder="请输入歌词"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -71,7 +70,7 @@
       <el-table-column prop="introduction" label="专辑" width="150" align="center"> </el-table-column>
       <el-table-column label="歌词">
         <template slot-scope="scope">
-          <p style="height: 100px; overflow-y: auto">{{ scope.row.introduction }}</p>
+          <p style="height: 100px; overflow-y: auto">{{ scope.row.lyric }}</p>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
@@ -83,15 +82,15 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div class="pagination">
+    <div class="pagination">
       <el-pagination background layout="prev, pager, next" :total="tableData.length" :current-page="currentPage" :page-size="pageSize" @current-change="handleCurrentChange">
       </el-pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { addSong, getAllSinger, updateSinger, deleteSinger } from "@/api/api.js"
+import { addSong, songOfSingerId, updateSong, deleteSong } from "@/api/api.js"
 import { mixins } from "@/mixins/index.js"
 export default {
   name: "Song",
@@ -107,7 +106,6 @@ export default {
       // 添加的对象
       addSongForm: {
         name: "",
-        singerName: "",
         introduction: "",
         lyric: "",
       },
@@ -117,6 +115,19 @@ export default {
         name: "",
         introduction: "",
         lyric: "",
+      },
+      // 表单验证规则
+      songFormRules: {
+        name: {
+          required: true,
+          message: "请输入歌曲名称",
+          trigger: "blur",
+        },
+        introduction: {
+          required: true,
+          message: "请输入歌曲专辑",
+          trigger: "blur",
+        },
       },
       // 表格内容数据
       tableData: [],
@@ -157,13 +168,12 @@ export default {
   created() {
     this.singerId = this.$route.query.id
     this.singerName = this.$route.query.name
-    console.log(this.$route.query)
-    // this.getData()
+    this.getData()
   },
   methods: {
-    /**查询所有歌手 */
+    /**查询歌手所以的歌曲 */
     async getData(value = 1) {
-      let data = await getAllSinger()
+      let data = await songOfSingerId({ singerId: this.singerId })
       this.tableData = data.msg
       this.tempData = data.msg
       this.handleCurrentChange(value)
@@ -176,41 +186,46 @@ export default {
     },
 
     /**添加歌曲 */
-    async addSong() {
-      //   将数据获取好
-      this.addSongForm["singerId"] = this.singerId
-      this.addSongForm["name"] = this.singerName + "-" + this.addSongForm["name"]
-      if (this.addSongForm["lyric"] == null || this.addSongForm["lyric"].length <= 0) {
-        this.addSongForm["lyric"] = "[00:00:00]暂无歌词"
-      }
-      this.addSongForm["pic"] = "/img/songPic/tubiao.jpg"
-      this.$refs.upload.submit()
-      let formData = new FormData()
-      //   将数据填充到提交对象
-      formData.append("singerId", this.addSongForm["singerId"])
-      formData.append("name", this.addSongForm["name"])
-      formData.append("introduction", this.addSongForm["introduction"])
-      formData.append("pic", this.addSongForm["pic"])
-      formData.append("lyric", this.addSongForm["lyric"])
-      formData.append("file", this.file)
-      let data = await addSong(formData)
-      if (data.code == 200) {
-        this.notify(data.msg)
-        this.contentDislogVisible = false
-      } else {
-        this.notify(data.msg, "error")
-      }
-      console.log(data)
+    addSong() {
+      this.$refs["addSongForm"].validate(async (valid) => {
+        if (valid) {
+          // 将数据获取好
+          this.addSongForm["singerId"] = this.singerId
+          this.addSongForm["name"] = this.singerName + "-" + this.addSongForm["name"]
+          if (this.addSongForm["lyric"] == null || this.addSongForm["lyric"].length <= 0) {
+            this.addSongForm["lyric"] = "[00:00:00]暂无歌词"
+          }
+          this.addSongForm["pic"] = "/img/songPic/tubiao.jpg"
+          this.$refs.upload.submit()
+          let formData = new FormData()
+          // 将数据填充到提交对象
+          formData.append("singerId", this.addSongForm["singerId"])
+          formData.append("name", this.addSongForm["name"])
+          formData.append("introduction", this.addSongForm["introduction"])
+          formData.append("pic", this.addSongForm["pic"])
+          formData.append("lyric", this.addSongForm["lyric"])
+          formData.append("file", this.file)
+          let data = await addSong(formData)
+          if (data.code == 200) {
+            this.notify(data.msg)
+            this.contentDislogVisible = false
+            this.$refs.upload.clearFiles()
+            this.getData(Math.floor((this.tableData.length + 1) / this.pageSize) + ((this.tableData.length + 1) % this.pageSize == 0 ? 0 : 1))
+          } else {
+            this.notify(data.msg, "error")
+          }
+        }
+      })
     },
 
-    /**添加歌手关闭弹窗，清空表单 */
+    /**添加歌曲关闭弹窗，清空表单 */
     handleAddSongClose() {
       for (const key in this.addSongForm) {
         this.addSongForm[key] = ""
       }
     },
 
-    /**编辑歌手 */
+    /**编辑歌曲信息 */
     handleEdit(row) {
       this.editVisible = true
       this.editSongForm = { ...row }
@@ -220,7 +235,7 @@ export default {
     editSinger() {
       this.$refs["editSongForm"].validate(async (valid) => {
         if (valid) {
-          let data = await updateSinger(this.editSongForm)
+          let data = await updateSong(this.editSongForm)
           if (data.code == 200) {
             this.notify(data.msg)
             this.editVisible = false
@@ -234,9 +249,9 @@ export default {
       })
     },
 
-    /**删除歌手 */
+    /**删除歌手歌曲 */
     async handleDeletr(id) {
-      let data = await deleteSinger({ id })
+      let data = await deleteSong({ id })
       if (data.code == 200) {
         this.notify(data.msg)
         if (this.currentPage * this.pageSize >= this.tableData.length) {
@@ -249,9 +264,9 @@ export default {
       }
     },
 
-    /**更新图片 */
+    /**更新歌曲图标 */
     uploadUrl(id) {
-      return `${this.$store.state.HOST}/singer/updateSingerPic?id=${id}`
+      return `${this.$store.state.HOST}/song/updateSongPic?id=${id}`
     },
 
     /**分页切换 */
@@ -259,7 +274,7 @@ export default {
       this.currentPage = value
     },
 
-    /**批量删除歌手 */
+    /**批量删除歌取 */
     async deleteAllSinger() {
       if (this.multipleSelection.length == 0) {
         this.notify("未选中任何内容")
@@ -267,7 +282,7 @@ export default {
       }
       let bol = []
       for (let index = 0; index < this.multipleSelection.length; index++) {
-        let data = await deleteSinger({ id: this.multipleSelection[index] })
+        let data = await deleteSong({ id: this.multipleSelection[index] })
         if (data.code == 200) {
           bol.push(true)
         } else {
@@ -288,17 +303,6 @@ export default {
         this.notify("删除异常")
         console.log(bol)
       }
-    },
-
-    /**跳转歌曲管理页面 */
-    songEdit(id, name) {
-      this.$router.push({
-        path: "/Song",
-        query: {
-          name,
-          id,
-        },
-      })
     },
   },
 }
