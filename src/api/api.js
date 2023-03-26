@@ -56,6 +56,27 @@ const updateSong = (data) => {
   return postAction(`song/update`, data)
 }
 
+// 查询所有歌单
+const getAllSongList = () => {
+  return getAction(`songList/selectAll`)
+}
+
+// 添加歌单
+const addSongList = (data) => {
+  return postAction(`songList/add`, data)
+}
+
+// 删除歌单
+const deleteSongList = (params) => {
+  return getAction(`songList/delete`, params)
+}
+
+// 修改歌单
+const updateSongList = (data) => {
+  return postAction(`songList/update`, data)
+}
+
+
 export {
   getLoginStatus,
   deleteSinger,
@@ -67,5 +88,9 @@ export {
   addSong,
   songOfSingerId,
   deleteSong,
-  updateSong
+  updateSong,
+  getAllSongList,
+  addSongList,
+  deleteSongList,
+  updateSongList
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="table">
     <div class="crumbs">
-      <i class="el-icon-tickets">&nbsp;{{ singerName }}-歌曲管理</i>
+      <i class="el-icon-tickets">&nbsp;{{ singerName }}-歌单的歌曲管理</i>
     </div>
     <el-dialog title="添加歌曲" :visible.sync="contentDislogVisible" width="500px" center @close="handleAddSongClose">
       <el-form :model="addSongForm" ref="addSongForm" label-width="90px" :rules="songFormRules">
@@ -120,7 +120,7 @@ import { mapGetters } from "vuex"
 import "@/assets/js/iconfont.js"
 import { addSong, songOfSingerId, updateSong, deleteSong } from "@/api/api.js"
 export default {
-  name: "Song",
+  name: "ListSong",
   mixins: [mixins],
   data() {
     return {
