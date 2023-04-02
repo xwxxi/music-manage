@@ -48,6 +48,11 @@ export default {
           index: "SongList",
           title: "歌单管理",
         },
+        {
+          icon: "el-icon-s-opportunity",
+          index: "SongAll",
+          title: "歌曲管理",
+        },
       ],
     }
   },

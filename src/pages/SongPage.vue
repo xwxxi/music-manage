@@ -75,7 +75,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="歌手-歌名" width="120" align="center"> </el-table-column>
+      <el-table-column prop="name" label="歌手-歌名" width="250" align="center"> </el-table-column>
       <el-table-column prop="introduction" label="专辑" width="150" align="center"> </el-table-column>
       <el-table-column label="歌词" align="center">
         <template slot-scope="scope">

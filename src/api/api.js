@@ -46,6 +46,12 @@ const songOfSingerId = (params)=>{
   return getAction(`song/singer/detail`,params)
 }
 
+// 根据歌曲名称获取歌曲
+const songOfName = (params)=>{
+  return getAction(`song/songOfName`,params)
+}
+
+
 // 删除歌曲
 const deleteSong = (params) => {
   return getAction(`song/delete`, params)
@@ -76,6 +82,15 @@ const updateSongList = (data) => {
   return postAction(`songList/update`, data)
 }
 
+// 根据歌单id获取对应的歌曲
+const songOfSongListId = (params)=>{
+  return getAction(`listSong/getSongBySongListId`,params)
+}
+
+// 从歌单中删除歌曲
+const deleteSongListSong = (params) => {
+  return getAction(`listSong/delete`, params)
+}
 
 export {
   getLoginStatus,
@@ -92,5 +107,8 @@ export {
   getAllSongList,
   addSongList,
   deleteSongList,
-  updateSongList
+  updateSongList,
+  songOfSongListId,
+  songOfName,
+  deleteSongListSong
 }
