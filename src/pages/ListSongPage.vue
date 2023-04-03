@@ -3,11 +3,11 @@
     <div class="crumbs">
       <i class="el-icon-tickets">&nbsp;{{ songListTitle }}歌单-歌曲管理</i>
     </div>
-    
+
     <div class="container">
       <div class="handle-box">
         <el-input size="mini" v-model="select_word" placeholder="请输入歌曲名" class="handle-input"></el-input>
-        <el-button type="primary" size="mini" @click="contentDislogVisible = true">添加歌曲</el-button>
+        <el-button type="primary" size="mini" @click="toAddSong()">添加歌曲</el-button>
       </div>
     </div>
     <el-table size="mini" border style="width: 100%" height="700px" :data="data">
@@ -165,13 +165,17 @@ export default {
     /**切换播放音乐 */
     setSongUrl(url, id) {
       if (this.toggle == id && this.isPlay) {
-        this.toggle = ''
+        this.toggle = ""
         this.$store.commit("setIsPlay", false)
       } else {
         this.toggle = id
         this.$store.commit("setUrl", this.$store.state.HOST + url)
         this.$store.commit("setIsPlay", true)
       }
+    },
+
+    toAddSong() {
+      this.$router.push({ path: "/SongAll" })
     },
   },
 }
