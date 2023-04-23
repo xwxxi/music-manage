@@ -101,6 +101,26 @@ const addSongToList = (data) => {
   return postAction(`listSong/add`, data)
 }
 
+// 查询所有用户
+const getAllConsumer = () => {
+  return getAction(`consumer/selectAll`)
+}
+
+// 删除用户
+const deleteConsumer = (params) => {
+  return getAction(`consumer/delete`, params)
+}
+
+// 修改用户
+const updateConsumer = (data) => {
+  return postAction(`consumer/update`, data)
+}
+
+// 添加用户
+const addConsumer = (data) => {
+  return postAction(`consumer/add`, data)
+}
+
 export {
   getLoginStatus,
   deleteSinger,
@@ -121,5 +141,9 @@ export {
   songOfName,
   deleteSongListSong,
   getSongAll,
-  addSongToList
+  addSongToList,
+  getAllConsumer,
+  deleteConsumer,
+  updateConsumer,
+  addConsumer
 }
