@@ -1,12 +1,12 @@
 <template>
   <div class="table">
     <el-dialog title="添加用户" :visible.sync="contentDislogVisible" width="500px" center @close="handleAddSingerClose">
-      <el-form :model="addSConsumerForm" :rules="singerFormRules" ref="addSConsumerForm" label-width="80px">
+      <el-form :model="addSConsumerForm" :rules="consumerFormRules" ref="addSConsumerForm" label-width="80px">
         <el-form-item prop="name" label="用户名称" size="mini">
           <el-input v-model="addSConsumerForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password" label="用户密码" size="mini">
-          <el-input v-model="addSConsumerForm.password" placeholder="请输入用户密码"></el-input>
+          <el-input type="password" v-model="addSConsumerForm.password" placeholder="请输入用户密码"></el-input>
         </el-form-item>
         <el-form-item label="性别" size="mini">
           <el-radio-group v-model="addSConsumerForm.sex">
@@ -38,12 +38,12 @@
     </el-dialog>
 
     <el-dialog title="修改用户" :visible.sync="editVisible" width="500px" center>
-      <el-form :model="editConsumerForm" :rules="singerFormRules" ref="editConsumerForm" label-width="80px">
+      <el-form :model="editConsumerForm" :rules="consumerFormRules" ref="editConsumerForm" label-width="80px">
         <el-form-item prop="name" label="用户名称" size="mini">
           <el-input v-model="editConsumerForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password" label="用户密码" size="mini">
-          <el-input v-model="editConsumerForm.password" placeholder="请输入用户密码"></el-input>
+          <el-input type="password" v-model="editConsumerForm.password" placeholder="请输入用户密码"></el-input>
         </el-form-item>
         <el-form-item label="性别" size="mini">
           <el-radio-group v-model="editConsumerForm.sex">
@@ -70,7 +70,7 @@
       </el-form>
       <span slot="footer">
         <el-button size="mini" @click="editVisible = false">取消</el-button>
-        <el-button type="primary" size="mini" @click="editSinger()">确定</el-button>
+        <el-button type="primary" size="mini" @click="editConsumer()">确定</el-button>
       </span>
     </el-dialog>
 
@@ -95,21 +95,21 @@
           </el-upload>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="用户名" width="120" align="center"> </el-table-column>
-      <el-table-column prop="password" label="密码" width="120" align="center"> </el-table-column>
+      <el-table-column prop="username" label="用户名" width="150" align="center"> </el-table-column>
+      <el-table-column prop="password" label="密码" width="150" align="center"> </el-table-column>
       <el-table-column label="性别" width="50" align="center">
         <template slot-scope="scope">
           <span>{{ changeSex(scope.row.sex) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="phoneNum" label="电话" width="120" align="center"> </el-table-column>
-      <el-table-column prop="email" label="邮箱" width="120" align="center"> </el-table-column>
-      <el-table-column label="生日" width="120" align="center">
+      <el-table-column prop="phoneNum" label="电话" width="150" align="center"> </el-table-column>
+      <el-table-column prop="email" label="邮箱" width="200" align="center"> </el-table-column>
+      <el-table-column label="生日" width="150" align="center">
         <template slot-scope="scope">
           <span>{{ arrachBirth(scope.row.birth) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="location" label="地区" width="120" align="center"> </el-table-column>
+      <el-table-column prop="location" label="地区" width="150" align="center"> </el-table-column>
       <el-table-column label="签名">
         <template slot-scope="scope">
           <p style="height: 100px; overflow-y: auto">{{ scope.row.introduction }}</p>
@@ -158,9 +158,6 @@ export default {
         birth: "",
         introduction: "",
         location: "",
-        avator: "",
-        create_time: "",
-        update_time: "",
       },
       // 编辑的对象
       editConsumerForm: {
@@ -173,9 +170,6 @@ export default {
         birth: "",
         introduction: "",
         location: "",
-        avator: "",
-        create_time: "",
-        update_time: "",
       },
       // 表格内容数据
       tableData: [],
@@ -188,17 +182,39 @@ export default {
       currentPage: 1,
       // 多选删除，选择的id
       multipleSelection: [],
-      singerFormRules: {
-        name: {
+      consumerFormRules: {
+        username: {
           required: true,
           message: "请输入用户名称",
           trigger: "blur",
         },
-        sex: {
+        password: {
           required: true,
-          message: "请输入选择性别",
+          message: "请输入密码",
           trigger: "blur",
         },
+        sex: {
+          required: true,
+          message: "请选择性别",
+          trigger: "blur",
+        },
+        phoneNum: {
+          required: true,
+          message: "请输入电话",
+          trigger: "blur",
+        },
+        email: [
+          {
+            required: true,
+            message: "请输入邮箱",
+            trigger: "blur",
+          },
+          {
+            type: "email",
+            message: "请输入正确的邮箱格式",
+            trigger: ["blur", "change"],
+          },
+        ],
         birth: {
           required: true,
           message: "请输入生日",
@@ -222,7 +238,7 @@ export default {
         this.tableData = []
         for (let item of this.tempData) {
           // includes 查找字符串中是否包含否一个字符串
-          if (item.name.includes(this.select_word)) {
+          if (item.username.includes(this.select_word)) {
             this.tableData.push(item)
           }
         }
@@ -248,22 +264,22 @@ export default {
 
     /**添加用户 */
     async addConsumer() {
-      this.addSConsumerForm["avator"] = "/img/singerPic/hhh.jpg"
-      let data = await addConsumer(this.addSConsumerForm)
-      if (data.code == 200) {
-        this.notify(data.msg)
-        this.contentDislogVisible = false
-        this.getData(Math.floor((this.tableData.length + 1) / this.pageSize) + ((this.tableData.length + 1) % this.pageSize == 0 ? 0 : 1))
-        this.handleAddSingerClose()
-      } else {
-        this.notify(data.msg, "error")
-      }
-    //   this.$refs["addSConsumerForm"].validate(async (valid) => {
-    //     if (valid) {
-    //     } else {
-    //       console.log("error submit!!")
-    //     }
-    //   })
+      this.$refs["addSConsumerForm"].validate(async (valid) => {
+        if (valid) {
+          this.addSConsumerForm["avator"] = "/img/userAvatorImages/hhh.jpg"
+          let data = await addConsumer(this.addSConsumerForm)
+          if (data.code == 200) {
+            this.notify(data.msg)
+            this.contentDislogVisible = false
+            this.getData(Math.floor((this.tableData.length + 1) / this.pageSize) + ((this.tableData.length + 1) % this.pageSize == 0 ? 0 : 1))
+            this.handleAddSingerClose()
+          } else {
+            this.notify(data.msg, "error")
+          }
+        } else {
+          console.log("error submit!!")
+        }
+      })
     },
 
     /**添加用户关闭弹窗，清空表单 */
@@ -280,21 +296,21 @@ export default {
     },
 
     /**弹窗编辑页面，保存修改的数据 */
-    async editSinger() {
-      let data = await updateConsumer(this.editConsumerForm)
-      if (data.code == 200) {
-        this.notify(data.msg)
-        this.editVisible = false
-        this.getData(this.currentPage)
-      } else {
-        this.notify(data.msg, "error")
-      }
-      //   this.$refs["editSingerForm"].validate(async (valid) => {
-      //     if (valid) {
-      //     } else {
-      //       console.log("error submit!!")
-      //     }
-      //   })
+    async editConsumer() {
+      this.$refs["editConsumerForm"].validate(async (valid) => {
+        if (valid) {
+          let data = await updateConsumer(this.editConsumerForm)
+          if (data.code == 200) {
+            this.notify(data.msg)
+            this.editVisible = false
+            this.getData(this.currentPage)
+          } else {
+            this.notify(data.msg, "error")
+          }
+        } else {
+          console.log("error submit!!")
+        }
+      })
     },
 
     /**删除用户 */
@@ -314,7 +330,7 @@ export default {
 
     /**更新图片 */
     uploadUrl(id) {
-      return `${this.$store.state.HOST}/singer/updateSingerPic?id=${id}`
+      return `${this.$store.state.HOST}/consumer/updateConsumerPic?id=${id}`
     },
 
     /**分页切换 */

@@ -40,7 +40,11 @@ export const mixins = {
         /**上传图片成功后的操作 */
         handleAvatorSuccess(data) {
             if (data.code == 200) {
-                this.getData()
+                if (this.currentPage * this.pageSize >= this.tableData.length) {
+                    this.getData(Math.floor((this.tableData.length - 1) / this.pageSize) + ((this.tableData.length - 1) % this.pageSize == 0 ? 0 : 1))
+                } else {
+                    this.getData(this.currentPage)
+                }
                 this.notify(data.msg)
             } else {
                 this.notify(data.msg, "error")
