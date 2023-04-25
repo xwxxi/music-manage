@@ -1,58 +1,66 @@
 <template>
     <div class="table">
-        <div class="crumbs">
-            <i class="el-icon-tickets">&nbsp;{{ songListTitle }}歌单-歌曲管理</i>
-        </div>
-
-        <div class="container">
-            <div class="handle-box">
-                <el-input size="mini" v-model="select_word" placeholder="请输入歌曲名" class="handle-input"></el-input>
-                <el-button type="primary" size="mini" @click="toAddSong()">添加歌曲</el-button>
+        <el-card>
+            <div class="crumbs">
+                <i class="el-icon-tickets">&nbsp;{{ songListTitle }}歌单-歌曲管理</i>
             </div>
-        </div>
-        <el-table size="mini" border style="width: 100%" height="700px" :data="data">
-            <el-table-column label="歌曲图片" width="110" align="center">
-                <template slot-scope="scope">
-                    <div class="song-img">
-                        <img :src="getUrl(scope.row.song.pic)" style="width: 100%" />
-                    </div>
-                    <div class="play" @click="setSongUrl(scope.row.song.url, scope.row.song.id)">
-                        <div v-if="toggle == scope.row.song.id">
-                            <svg class="icon">
-                                <use xlink:href="#icon-zanting"></use>
-                            </svg>
+            <div class="container">
+                <div class="handle-box">
+                    <el-input size="mini" v-model="select_word" placeholder="请输入歌曲名" class="handle-input"></el-input>
+                    <el-button type="primary" size="mini" @click="toAddSong()">添加歌曲</el-button>
+                </div>
+            </div>
+            <el-table size="mini" border style="width: 100%" height="700px" :data="data">
+                <el-table-column label="歌曲图片" width="110" align="center">
+                    <template slot-scope="scope">
+                        <div class="song-img">
+                            <img :src="getUrl(scope.row.song.pic)" style="width: 100%" />
                         </div>
-                        <div v-if="toggle != scope.row.song.id">
-                            <svg class="icon">
-                                <use xlink:href="#icon-bofanganniu"></use>
-                            </svg>
+                        <div class="play" @click="setSongUrl(scope.row.song.url, scope.row.song.id)">
+                            <div v-if="toggle == scope.row.song.id">
+                                <svg class="icon">
+                                    <use xlink:href="#icon-zanting"></use>
+                                </svg>
+                            </div>
+                            <div v-if="toggle != scope.row.song.id">
+                                <svg class="icon">
+                                    <use xlink:href="#icon-bofanganniu"></use>
+                                </svg>
+                            </div>
                         </div>
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="song.name" label="歌手-歌名" width="250" align="center"> </el-table-column>
-            <el-table-column prop="song.introduction" label="专辑" width="150" align="center"> </el-table-column>
-            <el-table-column label="歌词" align="center">
-                <template slot-scope="scope">
-                    <ul style="height: 100px; overflow-y: auto">
-                        <li v-for="(item, index) in parseLyric(scope.row.song.lyric)" :key="index">
-                            {{ item }}
-                        </li>
-                    </ul>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="200" align="center">
-                <template slot-scope="scope">
-                    <el-popconfirm title="这是一段内容确定删除吗？" @confirm="handleDeletr(scope.row.id)">
-                        <el-button slot="reference" type="danger" size="mini">移出歌单</el-button>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div class="pagination">
-            <el-pagination background layout="prev, pager, next" :total="tableData.length" :current-page="currentPage" :page-size="pageSize" @current-change="handleCurrentChange">
-            </el-pagination>
-        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="song.name" label="歌手-歌名" width="250" align="center"> </el-table-column>
+                <el-table-column prop="song.introduction" label="专辑" width="150" align="center"> </el-table-column>
+                <el-table-column label="歌词" align="center">
+                    <template slot-scope="scope">
+                        <ul style="height: 100px; overflow-y: auto">
+                            <li v-for="(item, index) in parseLyric(scope.row.song.lyric)" :key="index">
+                                {{ item }}
+                            </li>
+                        </ul>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="200" align="center">
+                    <template slot-scope="scope">
+                        <el-popconfirm title="这是一段内容确定删除吗？" @confirm="handleDeletr(scope.row.id)">
+                            <el-button slot="reference" type="danger" size="mini">移出歌单</el-button>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination">
+                <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="tableData.length"
+                    :current-page="currentPage"
+                    :page-size="pageSize"
+                    @current-change="handleCurrentChange"
+                >
+                </el-pagination>
+            </div>
+        </el-card>
     </div>
 </template>
 
@@ -182,9 +190,6 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
 .song-img {
     width: 100%;
     height: 80px;

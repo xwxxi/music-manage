@@ -36,52 +36,64 @@
             </span>
         </el-dialog>
 
-        <div class="container">
-            <div class="handle-box">
-                <el-input size="mini" v-model="select_word" placeholder="请输入标题" class="handle-input"></el-input>
-                <el-button type="primary" size="mini" @click="contentDislogVisible = true">添加歌单</el-button>
-                <el-popconfirm :title="'是否删除选中的' + multipleSelection.length + '条数据'" @confirm="deleteAllSinger">
-                    <el-button type="danger" size="mini" slot="reference">批量删除</el-button>
-                </el-popconfirm>
+        <el-card>
+            <div class="crumbs">
+                <i class="el-icon-tickets">&nbsp;歌单管理</i>
             </div>
-        </div>
-        <el-table size="mini" border style="width: 100%" height="700px" :data="data" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="40"> </el-table-column>
-            <el-table-column label="歌单图片" width="110" align="center">
-                <template slot-scope="scope">
-                    <div class="songList-img">
-                        <img :src="getUrl(scope.row.pic)" style="width: 100%" />
-                    </div>
-                    <el-upload :show-file-list="false" :action="uploadUrl(scope.row.id)" :before-upload="beforeAvatorUpload" :on-success="handleAvatorSuccess">
-                        <el-button size="mini">更新图片</el-button>
-                    </el-upload>
-                </template>
-            </el-table-column>
-            <el-table-column prop="title" label="标题" width="300" align="center"> </el-table-column>
-            <el-table-column label="歌单简介">
-                <template slot-scope="scope">
-                    <p style="height: 100px; overflow-y: auto">{{ scope.row.introduction }}</p>
-                </template>
-            </el-table-column>
-            <el-table-column prop="style" label="风格" width="150" align="center"> </el-table-column>
-            <el-table-column label="歌曲管理" align="center" width="110">
-                <template slot-scope="scope">
-                    <el-button type="info" size="mini" @click="songEdit(scope.row.id, scope.row.title)">歌曲管理</el-button>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="150" align="center">
-                <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-popconfirm title="这是一段内容确定删除吗？" @confirm="handleDeletr(scope.row.id)">
-                        <el-button slot="reference" type="danger" size="mini">删除</el-button>
+            <div class="container">
+                <div class="handle-box">
+                    <el-input size="mini" v-model="select_word" placeholder="请输入标题" class="handle-input"></el-input>
+                    <el-button type="primary" size="mini" @click="contentDislogVisible = true">添加歌单</el-button>
+                    <el-popconfirm :title="'是否删除选中的' + multipleSelection.length + '条数据'" @confirm="deleteAllSinger">
+                        <el-button type="danger" size="mini" slot="reference">批量删除</el-button>
                     </el-popconfirm>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div class="pagination">
-            <el-pagination background layout="prev, pager, next" :total="tableData.length" :current-page="currentPage" :page-size="pageSize" @current-change="handleCurrentChange">
-            </el-pagination>
-        </div>
+                </div>
+            </div>
+            <el-table size="mini" border style="width: 100%" height="700px" :data="data" @selection-change="handleSelectionChange">
+                <el-table-column type="selection" width="40"> </el-table-column>
+                <el-table-column label="歌单图片" width="110" align="center">
+                    <template slot-scope="scope">
+                        <div class="songList-img">
+                            <img :src="getUrl(scope.row.pic)" style="width: 100%" />
+                        </div>
+                        <el-upload :show-file-list="false" :action="uploadUrl(scope.row.id)" :before-upload="beforeAvatorUpload" :on-success="handleAvatorSuccess">
+                            <el-button size="mini">更新图片</el-button>
+                        </el-upload>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="title" label="标题" width="300" align="center"> </el-table-column>
+                <el-table-column label="歌单简介">
+                    <template slot-scope="scope">
+                        <p style="height: 100px; overflow-y: auto">{{ scope.row.introduction }}</p>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="style" label="风格" width="150" align="center"> </el-table-column>
+                <el-table-column label="歌曲管理" align="center" width="110">
+                    <template slot-scope="scope">
+                        <el-button type="info" size="mini" @click="songEdit(scope.row.id, scope.row.title)">歌曲管理</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="150" align="center">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
+                        <el-popconfirm title="这是一段内容确定删除吗？" @confirm="handleDeletr(scope.row.id)">
+                            <el-button slot="reference" type="danger" size="mini">删除</el-button>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination">
+                <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="tableData.length"
+                    :current-page="currentPage"
+                    :page-size="pageSize"
+                    @current-change="handleCurrentChange"
+                >
+                </el-pagination>
+            </div>
+        </el-card>
     </div>
 </template>
 
@@ -298,9 +310,6 @@ export default {
 </script>
 
 <style scoped>
-.handle-box {
-    margin-bottom: 20px;
-}
 .songList-img {
     width: 100%;
     height: 80px;

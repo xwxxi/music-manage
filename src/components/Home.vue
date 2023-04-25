@@ -36,6 +36,7 @@ export default {
     overflow: visible;
 }
 .el-main {
-    padding: 0;
+    padding: 20px;
+    background-color:  #CCFFFF;
 }
 </style>

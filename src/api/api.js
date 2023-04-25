@@ -121,6 +121,10 @@ const addConsumer = (data) => {
   return postAction(`consumer/add`, data)
 }
 
+// 获取数据的统计信息
+const getDataCount = () => {
+  return getAction(`admin/dataCount`)
+}
 export {
   getLoginStatus,
   deleteSinger,
@@ -145,5 +149,6 @@ export {
   getAllConsumer,
   deleteConsumer,
   updateConsumer,
-  addConsumer
+  addConsumer,
+  getDataCount
 }
