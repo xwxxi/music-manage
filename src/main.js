@@ -8,8 +8,8 @@ import './assets/css/main.css'
 import 'babel-polyfill'
 import VCharts from 'v-charts'
 
-Vue.use(ElementUI)
 Vue.use(VCharts)
+Vue.use(ElementUI)
 
 /* eslint-disable no-new */
 new Vue({

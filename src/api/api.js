@@ -125,6 +125,11 @@ const addConsumer = (data) => {
 const getDataCount = () => {
   return getAction(`admin/dataCount`)
 }
+
+// 获取数据的性别统计信息
+const getConsumerSexCount = () => {
+  return getAction(`admin/getConsumerSexCount`)
+}
 export {
   getLoginStatus,
   deleteSinger,
@@ -150,5 +155,6 @@ export {
   deleteConsumer,
   updateConsumer,
   addConsumer,
-  getDataCount
+  getDataCount,
+  getConsumerSexCount
 }
